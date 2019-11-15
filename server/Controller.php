@@ -12,6 +12,8 @@ use PDO;
 
 class Controller {
 
+    /* ___ Timer Controller  */
+
     public function timerInit() {
         $db = Connection::getConnection();
         $sql = "SELECT seconds, pause FROM timer WHERE id = 1";
@@ -41,12 +43,23 @@ class Controller {
         $db->exec($sql);
     }
 
+    /* ___ Chat Controller  */
+
+    /**
+     * Initiating the Chat Plug-In with existing messages
+     * @return string
+     */
     public function index() {
         $db = Connection::getConnection();
-        $messages = $this->selectAll($db);
+        $messages = $this->selectAllMessages($db);
         return json_encode($messages);
     }
 
+    /**
+     * persist the new message into base and return to the view
+     * @param $data array with sender name and message text
+     * @return string ip-address to pass it in the view
+     */
     public function store($data) {
         $db = Connection::getConnection();
         Migration::create_messages_table($db);
@@ -58,6 +71,14 @@ class Controller {
         return $ip;
     }
 
+    /**
+     * Plane insert operation into specified table by certain connection
+     * @param $db - the prepared PDO object
+     * @param $table - target table
+     * @param array $fields - variables of the record
+     * @param array $a - array with values
+     * @return int - primarty id of the record or zero on fail 
+     */
     private function insert($db, $table, array $fields, array $a = []) {
         $names = '';
         $wildcards = '';
@@ -103,12 +124,12 @@ class Controller {
     }
 
     /**
-     * Retrieve all rows from Db table in specified order
+     * Retrieve all rows from Messages table in specified order
      * @param PDO object of db connection
      * @param bool true adds the ascending order into query
      * @return array objects $this model on success filled with db row, or null
      */
-    private function selectAll($db, $order = true) {
+    private function selectAllMessages($db, $order = true) {
         $order = $order ? 'asc' : 'desc';
         $query = "SELECT * FROM messages ORDER BY id $order";
         $res = $db->prepare($query);
