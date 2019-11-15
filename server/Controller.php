@@ -14,6 +14,10 @@ class Controller {
 
     /* ___ Timer Controller  */
 
+    /**
+     * Initiating the Timer Plug-In with existing seconds amount on the server
+     * @return string - amount of seconds, pause of seconds if it applied
+     */
     public function timerInit() {
         $db = Connection::getConnection();
         $sql = "SELECT seconds, pause FROM timer WHERE id = 1";
@@ -24,6 +28,10 @@ class Controller {
         return json_encode(['seconds' => $row['seconds'], 'pause' => $row['pause']]);
     }
 
+    /**
+     * Fixate the time of start timer into table
+     * @param $seconds
+     */
     public function startTimer($seconds) {
         $db = Connection::getConnection();
         Migration::create_timer_table($db);
@@ -31,12 +39,19 @@ class Controller {
         $db->exec($sql);
     }
 
+    /**
+     * Fixate the time of pause timer into table
+     * @param $seconds
+     */
     public function pauseTimer($seconds) {
         $db = Connection::getConnection();
         $sql = "UPDATE timer SET pause = $seconds";
         $db->exec($sql);
     }
 
+    /**
+     * Reset the start and pause counter
+     */
     public function resetTimer() {
         $db = Connection::getConnection();
         $sql = "UPDATE timer SET seconds = 0, pause = 0";
@@ -77,7 +92,7 @@ class Controller {
      * @param $table - target table
      * @param array $fields - variables of the record
      * @param array $a - array with values
-     * @return int - primarty id of the record or zero on fail 
+     * @return int - primarty id of the record or zero on fail
      */
     private function insert($db, $table, array $fields, array $a = []) {
         $names = '';
