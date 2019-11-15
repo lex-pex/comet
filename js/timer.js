@@ -130,6 +130,9 @@ $(document).ready(function() {
 
     /* _____ Visual Effects _____ */
 
+    /**
+     * Wildcards for hours, minutes and seconds according the amount of seconds
+     */
     function compute_display() {
         var s = seconds % 60;
         var m = Math.floor(seconds / 60)  % 60;
@@ -139,20 +142,32 @@ $(document).ready(function() {
         hh.html((h < 10 ? '0' : '') +  h);
     }
 
+    /**
+     * Set the start button into off mode
+     */
     function disable_start_button() {
         able_stop_button();
         start_button.removeClass('btn-outline-success').addClass('btn-success');
     }
 
+    /**
+     * Set the start button into on mode
+     */
     function able_start_button() {
         disable_stop_button();
         start_button.removeClass('btn-success').addClass('btn-outline-success');
     }
 
+    /**
+     * Set the stop button into off mode
+     */
     function disable_stop_button() {
         stop_button.removeClass('btn-outline-danger').addClass('btn-danger');
     }
 
+    /**
+     * Set the stop button into on mode
+     */
     function able_stop_button() {
         stop_button.removeClass('btn-danger').addClass('btn-outline-danger');
     }
